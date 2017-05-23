@@ -1,0 +1,45 @@
+---
+
+- debug: var=hostname
+
+- name: "Configure device-init.yml"
+  become: true
+  template:
+    src: "templates/device-init.yaml.j2"
+    dest: "{{ host_boot_mount }}/device-init.yaml"
+    mode: 0644
+
+- name: "Configure wlan0"
+  become: true
+  template:
+    src: "templates/network-wlan0.cfg.j2"
+    dest: "{{ host_image_mount }}/etc/network/interfaces.d/wlan0"
+    mode: 0644
+
+- name: "Configure eth0"
+  become: true
+  template:
+    src: "templates/network-eth0.cfg.j2"
+    dest: "{{ host_image_mount }}/etc/network/interfaces.d/eth0"
+    mode: 0644
+  vars:
+    eth0_ipv4_address: "{{ bootstrap_networking[hostname].eth0_ipv4_address }}"
+
+- name: "Set hostname"
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - src: "templates/hostname.j2"
+      dest: "{{ host_image_mount }}/etc/hostname"
+    - src: "templates/hosts.j2"
+      dest: "{{ host_image_mount }}/etc/hosts"
+
+- name: "Install bootstrap script"
+  become: true
+  template:
+    src: "templates/startup-bootstrap.sh.j2"
+    dest: "{{ host_image_mount }}/usr/bin/startup-bootstrap.sh"
+    mode: 0744

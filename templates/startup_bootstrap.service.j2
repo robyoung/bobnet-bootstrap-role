@@ -1,0 +1,11 @@
+[Unit]
+Description=Bootstrap the system
+Wants=network-online.target
+# After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/startup-bootstrap.sh
+
+[Install]
+WantedBy=multi-user.target

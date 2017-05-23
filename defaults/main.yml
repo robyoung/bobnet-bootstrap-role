@@ -1,0 +1,22 @@
+---
+
+bootstrap_os: "raspbian"
+bootstrap_build_dir: "/var/tmp/raspbian-build"
+
+# bootstrap_wifi_ssid: ""
+# bootstrap_wifi_passphrase: ""
+
+# bootstrap_ansible_user_password: ""
+# bootstrap_ansible_user_public_key: ""
+
+# Hostnames for each host in the cluster
+hosts: []
+# - host01
+# - host02
+
+bootstrap_networking: {}
+# host01:
+#   eth0_ipv4_address: "192.0.2.65"
+#
+# host02:
+#   eth0_ipv4_address: "129.0.2.66"

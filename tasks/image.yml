@@ -1,0 +1,80 @@
+---
+
+- set_fact:
+    host_image_name: "{{ bootstrap_os_image_name }}-{{ hostname }}.img"
+
+- set_fact:
+    host_image_path: "{{ bootstrap_build_dir }}/{{ host_image_name }}"
+    host_image_mount: "/mnt/{{ host_image_name }}"
+
+- set_fact:
+    host_boot_mount: "{{ host_image_mount }}.boot"
+
+- name: "Make a copy of the image for this instance"
+  copy:
+    src: "{{ bootstrap_build_dir }}/{{ bootstrap_os_image_filename }}"
+    dest: "{{ host_image_path }}"
+    force: false
+    remote_src: true
+
+- name: "Get Linux partition offset"
+  image_partition_offset:
+    image: "{{ host_image_path }}"
+    fs_type: "Linux"
+  register: linux_partition
+
+- name: "Get Boot partition offset"
+  image_partition_offset:
+    image: "{{ host_image_path }}"
+    fs_type: "W95 FAT32"
+  register: boot_partition
+
+- name: "Create mount target directory"
+  become: true
+  file: path="{{ host_image_mount }}" state=directory
+
+- name: "Mount Linux partition"
+  become: true
+  mount:
+    name: "{{ host_image_mount }}"
+    src: "{{ host_image_path }}"
+    opts: "loop,offset={{ linux_partition.offset_bytes }}"
+    fstype: "ext4"
+    state: "mounted"
+
+- name: "Mount boot partition"
+  become: true
+  mount:
+    name: "{{ host_boot_mount }}"
+    src: "{{ host_image_path }}"
+    opts: "loop,offset={{ boot_partition.offset_bytes }}"
+    fstype: "vfat"
+    state: "mounted"
+
+- name: "Run image bootstrapping"
+  include: "bootstrap/{{ bootstrap_os }}.yml"
+
+#- fail: msg="Stop for looking"
+
+- name: "Unmount Linux partition"
+  become: true
+  mount:
+    name: "{{ host_image_mount }}"
+    state: "unmounted"
+
+- name: "Unmount boot partition"
+  become: true
+  mount:
+    name: "{{ host_boot_mount }}"
+    state: "unmounted"
+
+- name: "Copy image to output directory"
+  copy:
+    src: "{{ host_image_path }}"
+    dest: "/built-images/{{ host_image_name }}"
+    remote_src: true
+
+- name: "Remove temporary image file"
+  file:
+    path: "{{ host_image_path }}"
+    state: absent

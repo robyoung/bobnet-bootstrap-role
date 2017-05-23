@@ -1,0 +1,61 @@
+---
+
+- debug: var=hostname
+
+- name: "Configure wlan0"
+  become: true
+  template:
+    src: "templates/network-wlan0.cfg.j2"
+    dest: "{{ host_image_mount }}/etc/network/interfaces.d/01-wlan0.cfg"
+    mode: 0644
+
+- name: "Configure eth0"
+  become: true
+  template:
+    src: "templates/network-eth0.cfg.j2"
+    dest: "{{ host_image_mount }}/etc/network/interfaces.d/02-eth0.cfg"
+    mode: 0644
+  vars:
+    eth0_ipv4_address: "{{ bootstrap_networking[hostname].eth0_ipv4_address }}"
+
+- name: "Set hostname"
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - src: "templates/hostname.j2"
+      dest: "{{ host_image_mount }}/etc/hostname"
+    - src: "templates/hosts.j2"
+      dest: "{{ host_image_mount }}/etc/hosts"
+
+- name: "Disable cloud-init"
+  become: true
+  file:
+    path: "{{ host_image_mount }}/etc/cloud/cloud-init.disabled"
+    state: touch
+    mode: 0644
+
+- name: "Install bootstrap script"
+  become: true
+  template:
+    src: "templates/startup-bootstrap.sh.j2"
+    dest: "{{ host_image_mount }}/usr/bin/startup-bootstrap.sh"
+    mode: 0744
+
+- name: "Install SystemD startup_bootstrap Unit"
+  become: true
+  template:
+    src: "templates/startup_bootstrap.service.j2"
+    dest: "{{ host_image_mount }}/etc/systemd/system/startup_bootstrap.service"
+    mode: 0644
+
+- name: "Enable SystemD startup_bootstrap Unit"
+  become: true
+  file:
+    src: "/etc/systemd/system/startup_bootstrap.service"
+    dest: "{{ host_image_mount }}/etc/systemd/system/multi-user.target.wants/startup_bootstrap.service"
+    state: "link"
+    mode: 0777
+    force: true
