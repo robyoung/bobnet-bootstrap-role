@@ -1,0 +1,20 @@
+bootstrap_os: "hypriot"
+
+bootstrap_wifi_ssid: "dummy"
+bootstrap_wifi_passphrase: "dummy"
+
+bootstrap_ansible_user_password: "dummy"
+bootstrap_ansible_user_public_key: "dummy"
+
+bootstrap_hosts:
+  - bob01
+  - bob02
+  - bob03
+
+bootstrap_networking:
+  bob01:
+    eth0_ipv4_address: "192.0.2.65"
+  bob02:
+    eth0_ipv4_address: "129.0.2.66"
+  bob03:
+    eth0_ipv4_address: "129.0.2.67"

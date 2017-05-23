@@ -42,6 +42,6 @@
   when: bootstrap_os_image_zipname.endswith(".xz")
 
 - include: image.yml
-  with_items: "{{ hostvars['default']['hosts'] }}"
+  with_items: "{{ bootstrap_hosts }}"
   loop_control:
     loop_var: hostname

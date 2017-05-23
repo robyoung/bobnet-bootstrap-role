@@ -1,0 +1,6 @@
+---
+
+- name: "Bootstrap disk images"
+  hosts: all
+  roles:
+    - bobnet-bootstrap

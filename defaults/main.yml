@@ -10,7 +10,7 @@ bootstrap_build_dir: "/var/tmp/raspbian-build"
 # bootstrap_ansible_user_public_key: ""
 
 # Hostnames for each host in the cluster
-hosts: []
+bootstrap_hosts: []
 # - host01
 # - host02
 
