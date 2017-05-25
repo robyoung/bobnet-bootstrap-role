@@ -23,7 +23,7 @@
     dest: "{{ host_image_mount }}/etc/network/interfaces.d/eth0"
     mode: 0644
   vars:
-    eth0_ipv4_address: "{{ bootstrap_networking[hostname].eth0_ipv4_address }}"
+    eth0_ipv4_address: "{{ bobnet_networking[hostname].eth0_ipv4_address }}"
 
 - name: "Set hostname"
   become: true

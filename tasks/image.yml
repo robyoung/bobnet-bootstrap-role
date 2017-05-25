@@ -1,10 +1,10 @@
 ---
 
 - set_fact:
-    host_image_name: "{{ bootstrap_os_image_name }}-{{ hostname }}.img"
+    host_image_name: "{{ bobnet_os_image_name }}-{{ hostname }}.img"
 
 - set_fact:
-    host_image_path: "{{ bootstrap_build_dir }}/{{ host_image_name }}"
+    host_image_path: "{{ bobnet_build_dir }}/{{ host_image_name }}"
     host_image_mount: "/mnt/{{ host_image_name }}"
 
 - set_fact:
@@ -12,7 +12,7 @@
 
 - name: "Make a copy of the image for this instance"
   copy:
-    src: "{{ bootstrap_build_dir }}/{{ bootstrap_os_image_filename }}"
+    src: "{{ bobnet_build_dir }}/{{ bobnet_os_image_filename }}"
     dest: "{{ host_image_path }}"
     force: false
     remote_src: true
@@ -52,7 +52,7 @@
     state: "mounted"
 
 - name: "Run image bootstrapping"
-  include: "bootstrap/{{ bootstrap_os }}.yml"
+  include: "bootstrap/{{ bobnet_os }}.yml"
 
 #- fail: msg="Stop for looking"
 

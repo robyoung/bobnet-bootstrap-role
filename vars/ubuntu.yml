@@ -1,5 +1,5 @@
 # Ubuntu Xenial - couldn't get wifi working
-bootstrap_os_image_name: "ubuntu-16.04-preinstalled-server-armhf+raspi3"
-bootstrap_os_image_filename: "{{ bootstrap_os_image_name }}.img"
-bootstrap_os_image_zipname: "{{ bootstrap_os_image_filename }}.xz"
-bootstrap_os_image_url: "http://www.finnie.org/software/raspberrypi/ubuntu-rpi3/{{ bootstrap_os_image_zipname }}"
+bobnet_os_image_name: "ubuntu-16.04-preinstalled-server-armhf+raspi3"
+bobnet_os_image_filename: "{{ bobnet_os_image_name }}.img"
+bobnet_os_image_zipname: "{{ bobnet_os_image_filename }}.xz"
+bobnet_os_image_url: "http://www.finnie.org/software/raspberrypi/ubuntu-rpi3/{{ bobnet_os_image_zipname }}"

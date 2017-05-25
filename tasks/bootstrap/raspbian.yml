@@ -8,8 +8,8 @@
     dest: "{{ host_image_mount }}/etc/wpa_supplicant/wpa_supplicant.conf"
     block: |
       network={
-        ssid="{{ bootstrap_wifi_ssid }}"
-        psk="{{ bootstrap_wifi_passphrase }}"
+        ssid="{{ bobnet_wifi_ssid }}"
+        psk="{{ bobnet_wifi_passphrase }}"
       }
 
 - name: "Statically configure eth0"
@@ -18,7 +18,7 @@
     dest: "{{ host_image_mount }}/etc/dhcpcd.conf"
     block: |
       interface eth0
-      static ip_address={{ bootstrap_networking[hostname].eth0_ipv4_address }}
+      static ip_address={{ bobnet_networking[hostname].eth0_ipv4_address }}
 
 - name: "Set hostname"
   become: true

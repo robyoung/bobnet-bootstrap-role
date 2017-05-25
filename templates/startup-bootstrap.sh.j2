@@ -9,10 +9,10 @@ apt-get install -y openssh-server
 # Set up ansible user
 id -u ansible > /dev/null 2>&1 || {
   useradd -m -s /bin/bash ansible
-  echo 'ansible:{{ bootstrap_ansible_user_password }}' | chpasswd
+  echo 'ansible:{{ bobnet_ansible_user_password }}' | chpasswd
   echo "ansible ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/010_ansible-nopasswd
   mkdir -p ~ansible/.ssh
-  grep -q ansible ~ansible/.ssh/authorized_keys || echo "{{ bootstrap_ansible_user_public_key }}" >> ~ansible/.ssh/authorized_keys
+  grep -q ansible ~ansible/.ssh/authorized_keys || echo "{{ bobnet_ansible_user_public_key }}" >> ~ansible/.ssh/authorized_keys
   chown -R ansible:ansible ~ansible/.ssh
   chmod -R 700 ~ansible/.ssh
 }

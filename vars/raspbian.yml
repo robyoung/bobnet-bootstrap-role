@@ -1,4 +1,4 @@
-bootstrap_os_image_name: "2017-03-02-raspbian-jessie-lite"
-bootstrap_os_image_filename: "{{ bootstrap_os_image_name }}.img"
-bootstrap_os_image_zipname: "{{ bootstrap_os_image_name }}.zip"
-bootstrap_os_image_url: "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-03-03/{{ bootstrap_os_image_zipname }}"
+bobnet_os_image_name: "2017-03-02-raspbian-jessie-lite"
+bobnet_os_image_filename: "{{ bobnet_os_image_name }}.img"
+bobnet_os_image_zipname: "{{ bobnet_os_image_name }}.zip"
+bobnet_os_image_url: "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-03-03/{{ bobnet_os_image_zipname }}"

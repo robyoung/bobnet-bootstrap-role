@@ -1,20 +1,20 @@
 ---
 
-bootstrap_os: "raspbian"
-bootstrap_build_dir: "/var/tmp/raspbian-build"
+bobnet_os: "raspbian"
+bobnet_build_dir: "/var/tmp/raspbian-build"
 
-# bootstrap_wifi_ssid: ""
-# bootstrap_wifi_passphrase: ""
+# bobnet_wifi_ssid: ""
+# bobnet_wifi_passphrase: ""
 
-# bootstrap_ansible_user_password: ""
-# bootstrap_ansible_user_public_key: ""
+# bobnet_ansible_user_password: ""
+# bobnet_ansible_user_public_key: ""
 
 # Hostnames for each host in the cluster
-bootstrap_hosts: []
+bobnet_hosts: []
 # - host01
 # - host02
 
-bootstrap_networking: {}
+bobnet_networking: {}
 # host01:
 #   eth0_ipv4_address: "192.0.2.65"
 #

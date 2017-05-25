@@ -5,7 +5,7 @@
   when: ansible_system != 'Linux'
 
 - name: "Include target OS vars"
-  include_vars: "{{ bootstrap_os }}.yml"
+  include_vars: "{{ bobnet_os }}.yml"
 
 - name: "Install required dependencies"
   become: true
@@ -18,30 +18,30 @@
 
 - name: "Create working directory"
   file:
-    path: "{{ bootstrap_build_dir }}"
+    path: "{{ bobnet_build_dir }}"
     state: "directory"
 
 - name: "Download image"
   get_url:
-    url: "{{ bootstrap_os_image_url }}"
-    tmp_dest: "{{ bootstrap_build_dir }}"
-    dest: "{{ bootstrap_build_dir }}/{{ bootstrap_os_image_zipname }}"
+    url: "{{ bobnet_os_image_url }}"
+    tmp_dest: "{{ bobnet_build_dir }}"
+    dest: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
 
 - name: "Unzip the image"
   unarchive:
-    src: "{{ bootstrap_build_dir }}/{{ bootstrap_os_image_zipname }}"
-    dest: "{{ bootstrap_build_dir }}"
-    creates: "{{ bootstrap_build_dir }}/{{ bootstrap_os_image_filename }}"
+    src: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
+    dest: "{{ bobnet_build_dir }}"
+    creates: "{{ bobnet_build_dir }}/{{ bobnet_os_image_filename }}"
     remote_src: yes
-  when: bootstrap_os_image_zipname.endswith(".zip")
+  when: bobnet_os_image_zipname.endswith(".zip")
 
 - name: "Unxz the image"
-  shell: "unxz -k {{ bootstrap_build_dir }}/{{ bootstrap_os_image_zipname }}"
+  shell: "unxz -k {{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
   args:
-    creates: "{{ bootstrap_build_dir }}/{{ bootstrap_os_image_filename }}"
-  when: bootstrap_os_image_zipname.endswith(".xz")
+    creates: "{{ bobnet_build_dir }}/{{ bobnet_os_image_filename }}"
+  when: bobnet_os_image_zipname.endswith(".xz")
 
 - include: image.yml
-  with_items: "{{ bootstrap_hosts }}"
+  with_items: "{{ bobnet_hosts }}"
   loop_control:
     loop_var: hostname
