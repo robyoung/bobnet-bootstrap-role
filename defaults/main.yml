@@ -14,6 +14,10 @@ bobnet_hosts: []
 # - host01
 # - host02
 
+bobnet_oses: {}
+# host01: hypriot
+# host02: raspbian
+
 bobnet_networking: {}
 # host01:
 #   eth0_ipv4_address: "192.0.2.65"

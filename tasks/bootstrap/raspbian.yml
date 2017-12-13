@@ -19,6 +19,7 @@
     block: |
       interface eth0
       static ip_address={{ bobnet_networking[hostname].eth0_ipv4_address }}
+  when: "hostname in bobnet_networking"
 
 - name: "Set hostname"
   become: true

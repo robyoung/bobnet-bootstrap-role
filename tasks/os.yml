@@ -1,0 +1,44 @@
+---
+
+- name: "Include target OS vars"
+  include_vars: "{{ bobnet_os }}.yml"
+
+- name: "Install required dependencies"
+  become: true
+  package:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - unzip
+    - xz-utils
+
+- name: "Create working directory"
+  file:
+    path: "{{ bobnet_build_dir }}"
+    state: "directory"
+
+- name: "Download image"
+  get_url:
+    url: "{{ bobnet_os_image_url }}"
+    tmp_dest: "{{ bobnet_build_dir }}"
+    dest: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
+
+- name: "Unzip the image"
+  unarchive:
+    src: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
+    dest: "{{ bobnet_build_dir }}"
+    creates: "{{ bobnet_build_dir }}/{{ bobnet_os_image_filename }}"
+    remote_src: yes
+  when: bobnet_os_image_zipname.endswith(".zip")
+
+- name: "Unxz the image"
+  shell: "unxz -k {{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
+  args:
+    creates: "{{ bobnet_build_dir }}/{{ bobnet_os_image_filename }}"
+  when: bobnet_os_image_zipname.endswith(".xz")
+
+- include: image.yml
+  with_items: "{{ bobnet_hosts }}"
+  loop_control:
+    loop_var: hostname
+  when: bobnet_oses[hostname] == bobnet_os
