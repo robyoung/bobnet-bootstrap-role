@@ -1,4 +1,4 @@
-bobnet_os_image_name: "2017-03-02-raspbian-jessie-lite"
+bobnet_os_image_name: "2017-11-29-raspbian-stretch-lite"
 bobnet_os_image_filename: "{{ bobnet_os_image_name }}.img"
 bobnet_os_image_zipname: "{{ bobnet_os_image_name }}.zip"
-bobnet_os_image_url: "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-03-03/{{ bobnet_os_image_zipname }}"
+bobnet_os_image_url: "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-12-01/{{ bobnet_os_image_zipname }}"

@@ -1,4 +1,4 @@
-bobnet_os_image_name: "hypriotos-rpi-v1.4.0"
+bobnet_os_image_name: "hypriotos-rpi-v1.7.1"
 bobnet_os_image_filename: "{{ bobnet_os_image_name }}.img"
 bobnet_os_image_zipname: "{{ bobnet_os_image_filename }}.zip"
-bobnet_os_image_url: "https://github.com/hypriot/image-builder-rpi/releases/download/v1.4.0/{{ bobnet_os_image_zipname }}"
+bobnet_os_image_url: "https://github.com/hypriot/image-builder-rpi/releases/download/v1.7.1/{{ bobnet_os_image_zipname }}"
