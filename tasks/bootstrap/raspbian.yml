@@ -19,7 +19,16 @@
     block: |
       interface eth0
       static ip_address={{ bobnet_networking[hostname].eth0_ipv4_address }}
-  when: "hostname in bobnet_networking"
+  when: "hostname in bobnet_networking and 'eth0_ipv4_address' in bobnet_networking[hostname]"
+
+- name: "Statically configure eth1"
+  become: true
+  blockinfile:
+    dest: "{{ host_image_mount }}/etc/dhcpcd.conf"
+    block: |
+      interface eth1
+      static ip_address={{ bobnet_networking[hostname].eth1_ipv4_address }}
+  when: "hostname in bobnet_networking and 'eth1_ipv4_address' in bobnet_networking[hostname]"
 
 - name: "Set hostname"
   become: true

@@ -31,7 +31,9 @@
 
 - name: "Create mount target directory"
   become: true
-  file: path="{{ host_image_mount }}" state=directory
+  file:
+    path: "{{ host_image_mount }}"
+    state: directory
 
 - name: "Mount Linux partition"
   become: true
@@ -51,10 +53,12 @@
     fstype: "vfat"
     state: "mounted"
 
+# - fail: msg="Stop for looking one"
+
 - name: "Run image bootstrapping"
   include: "bootstrap/{{ bobnet_os }}.yml"
 
-#- fail: msg="Stop for looking"
+# - fail: msg="Stop for looking"
 
 - name: "Unmount Linux partition"
   become: true

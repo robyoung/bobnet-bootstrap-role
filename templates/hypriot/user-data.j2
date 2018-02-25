@@ -1,0 +1,89 @@
+#cloud-config
+# vim: syntax=yaml
+#
+
+# The current version of cloud-init in the Hypriot rpi-64 is 0.7.9
+# When dealing with cloud-init, it is SUPER important to know the version
+# I have wasted many hours creating servers to find out the module I was trying to use wasn't in the cloud-init version I had
+# Documentation: http://cloudinit.readthedocs.io/en/0.7.9/index.html
+
+# Set your hostname here, the manage_etc_hosts will update the hosts file entries as well
+hostname: "{{ hostname }}"
+manage_etc_hosts: true
+
+# You could modify this for your own user information
+users:
+  - name: ansible
+    gecos: "Ansible"
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users,docker
+    plain_text_passwd: "{{ bobnet_ansible_user_password }}"
+    lock_passwd: false
+    chpasswd: { expire: false }
+    ssh-authorized-keys:
+      - "{{ bobnet_ansible_user_public_key }}"
+
+# # Set the locale of the system
+locale: "en_GB.UTF-8"
+
+# # Set the timezone
+# # Value of 'timezone' must exist in /usr/share/zoneinfo
+timezone: "Europe/London"
+
+# # Update apt packages on first boot
+package_update: true
+package_upgrade: true
+# package_reboot_if_required: true
+# package_upgrade: false
+
+# # Install any additional apt packages you need here
+packages:
+  - openssh-server
+
+# # WiFi connect to HotSpot
+# # - use `wpa_passphrase SSID PASSWORD` to encrypt the psk
+write_files:
+  - content: |
+      # Supported HostKey algorithms by order of preference.
+      HostKey /etc/ssh/ssh_host_ed25519_key
+      HostKey /etc/ssh/ssh_host_rsa_key
+      HostKey /etc/ssh/ssh_host_ecdsa_key
+       
+      KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+       
+      Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+       
+      MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+       
+      # Password based logins are disabled - only public key based logins are allowed.
+      AuthenticationMethods publickey
+       
+      # LogLevel VERBOSE logs user's key fingerprint on login. Needed to have a clear audit track of which key was using to log in.
+      LogLevel VERBOSE
+       
+      # Log sftp level file access (read/write/etc.) that would not be easily logged otherwise.
+      Subsystem sftp  /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO
+       
+      # Root login is not allowed for auditing reasons. This is because it's difficult to track which process belongs to which root user:
+      #
+      # On Linux, user sessions are tracking using a kernel-side session id, however, this session id is not recorded by OpenSSH.
+      # Additionally, only tools such as systemd and auditd record the process session id.
+      # On other OSes, the user session id is not necessarily recorded at all kernel-side.
+      # Using regular users in combination with /bin/su or /usr/bin/sudo ensure a clear audit track.
+      PermitRootLogin No
+       
+      # Use kernel sandbox mechanisms where possible in unprivilegied processes
+      # Systrace on OpenBSD, Seccomp on Linux, seatbelt on MacOSX/Darwin, rlimit elsewhere.
+      UsePrivilegeSeparation sandbox
+    path: /etc/ssh/sshd_config
+
+# These commands will be ran once on first boot only
+runcmd:
+  # Pickup the hostname changes
+  - 'systemctl restart avahi-daemon'
+
+#  # Activate WiFi interface
+  - 'ifup wlan0'
+
+  - '/usr/bin/startup-bootstrap.sh'

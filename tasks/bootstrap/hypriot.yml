@@ -2,11 +2,18 @@
 
 - debug: var=hostname
 
-- name: "Configure device-init.yml"
+- name: "Make a copy user-data"
+  become: true
+  copy:
+    src: "{{ host_boot_mount }}/user-data"
+    dest: "/built-images/user-data.original"
+    remote_src: true
+
+- name: "Configure user-data"
   become: true
   template:
-    src: "templates/device-init.yaml.j2"
-    dest: "{{ host_boot_mount }}/device-init.yaml"
+    src: "templates/hypriot/user-data.j2"
+    dest: "{{ host_boot_mount }}/user-data"
     mode: 0644
 
 - name: "Configure wlan0"
@@ -42,4 +49,4 @@
   template:
     src: "templates/startup-bootstrap.sh.j2"
     dest: "{{ host_image_mount }}/usr/bin/startup-bootstrap.sh"
-    mode: 0744
+    mode: 0755

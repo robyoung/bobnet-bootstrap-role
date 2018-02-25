@@ -23,6 +23,12 @@
     tmp_dest: "{{ bobnet_build_dir }}"
     dest: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
 
+- name: "Copy download to output directory"
+  copy:
+    src: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
+    dest: "/built-images/{{ bobnet_os_image_zipname }}"
+    remote_src: true
+
 - name: "Unzip the image"
   unarchive:
     src: "{{ bobnet_build_dir }}/{{ bobnet_os_image_zipname }}"
